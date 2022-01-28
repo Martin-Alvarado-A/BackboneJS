@@ -2,19 +2,16 @@
 // Later, you'll see how to organize your code into separate
 // files and modules.
 
-let Animal = Backbone.Model.extend({
-  walk: function () {
-    console.log("Animal walking...");
-  },
+let Song = Backbone.Model.extend();
+
+let Songs = Backbone.Collection.extend({
+  model: Song,
 });
 
-let Dog = Animal.extend({
-  walk: function () {
-    Animal.prototype.walk.apply(this);
-    console.log("Dog walking...");
-  },
-});
+let songs = new Songs([
+  new Song({ title: "Song 1" }),
+  new Song({ title: "Song 2" }),
+  new Song({ title: "Song 3" }),
+]);
 
-let dog = new Dog();
-
-dog.walk();
+songs.add(new Song({ title: "Song 4" }));

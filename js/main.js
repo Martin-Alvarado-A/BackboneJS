@@ -2,33 +2,22 @@
 // Later, you'll see how to organize your code into separate
 // files and modules.
 
-let Song = Backbone.Model.extend();
+let SongView = Backbone.View.extend({
+  tagName: "span",
+  className: "song",
+  id: "1234",
+  attributes: {
+    "data-genre": "Jazz",
+  },
+  render: function () {
+    this.$el.html("Hello world");
 
-let Songs = Backbone.Collection.extend({
-  model: Song,
+    return this;
+  },
 });
 
-let songs = new Songs();
+// var songView = new SongView({ el: "#container" });
+var songView = new SongView();
+// songView.render();
 
-songs.add(
-  new Song({
-    title: "Song 1",
-    genre: "Jazz",
-    downloads: 110,
-  }),
-  { at: 0 }
-);
-
-songs.push(new Song({ title: "Song 2", genre: "Jazz", downloads: 90 }));
-
-let jazzSongs = songs.where({ genre: "Jazz" });
-let firstJazzSong = songs.findWhere({ genre: "Jazz" });
-
-console.log("Jazz Songs", jazzSongs);
-console.log("First Jazz Songs", firstJazzSong);
-
-let filteredSongs = songs.where({ genre: "Jazz" }, { title: "Song 2" });
-console.log("Filtered Songs", filteredSongs);
-
-let topDownloads = songs.filter(song => song.get("downloads") > 100);
-console.log("Top Songs", topDownloads);
+$("#container").html(songView.render().$el);

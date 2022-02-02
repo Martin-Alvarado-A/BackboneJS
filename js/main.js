@@ -2,22 +2,34 @@
 // Later, you'll see how to organize your code into separate
 // files and modules.
 
-let SongView = Backbone.View.extend({
-  tagName: "span",
-  className: "song",
-  id: "1234",
-  attributes: {
-    "data-genre": "Jazz",
-  },
-  render: function () {
-    this.$el.html("Hello world");
+let Song = Backbone.Model.extend();
 
+let Songs = Backbone.Collection.extend({
+  model: Song,
+});
+
+let SongView = Backbone.View.extend({
+  tagName: "li",
+  render: function () {
+    this.$el.html(this.model.get("title"));
     return this;
   },
 });
 
-// var songView = new SongView({ el: "#container" }); // instantiate right away
-var songView = new SongView();
-// songView.render(); // render the view
+let SongsView = Backbone.View.extend({
+  render: function () {
+    this.model.each(song => {
+      let songView = new SongView({ model: song });
+      this.$el.append(songView.render().$el);
+    });
+  },
+});
 
-$("#container").html(songView.render().$el); // instanciate via selector and render it right away
+let songs = new Songs([
+  new Song({ title: "Black Widow" }),
+  new Song({ title: "Child Of Vision" }),
+  new Song({ title: "Pull me under" }),
+]);
+
+let songsView = new SongsView({ el: "#songs", model: songs });
+songsView.render();

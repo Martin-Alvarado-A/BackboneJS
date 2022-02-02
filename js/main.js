@@ -4,32 +4,29 @@
 
 let Song = Backbone.Model.extend();
 
-let Songs = Backbone.Collection.extend({
-  model: Song,
-});
-
 let SongView = Backbone.View.extend({
-  tagName: "li",
+  events: {
+    click: "onClick",
+    "click .bookmark": "onClickBookmark",
+  },
+  onClick: () => {
+    console.log("This");
+  },
+  onClickBookmark: event => {
+    event.stopPropagation();
+    console.log("bookmarked");
+  },
   render: function () {
-    this.$el.html(this.model.get("title"));
+    this.$el.html(
+      this.model.get("title") +
+        "<button>Listen</button> <button class='bookmark'>Bookmark</button>"
+    );
     return this;
   },
 });
 
-let SongsView = Backbone.View.extend({
-  render: function () {
-    this.model.each(song => {
-      let songView = new SongView({ model: song });
-      this.$el.append(songView.render().$el);
-    });
-  },
-});
+let song = new Song({ title: "Child of vision" });
 
-let songs = new Songs([
-  new Song({ title: "Black Widow" }),
-  new Song({ title: "Child Of Vision" }),
-  new Song({ title: "Pull me under" }),
-]);
+let songView = new SongView({ el: "#container", model: song });
 
-let songsView = new SongsView({ el: "#songs", model: songs });
-songsView.render();
+songView.render();

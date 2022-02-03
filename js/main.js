@@ -2,24 +2,22 @@
 // Later, you'll see how to organize your code into separate
 // files and modules.
 
-let Song = Backbone.Model.extend();
+let Song = Backbone.Model.extend({
+  defaults: {
+    listeners: 0,
+  },
+});
 
 let SongView = Backbone.View.extend({
-  events: {
-    click: "onClick",
-    "click .bookmark": "onClickBookmark",
+  initialize: function () {
+    this.model.on("change", this.onModelChange, this);
   },
-  onClick: () => {
-    console.log("This");
-  },
-  onClickBookmark: event => {
-    event.stopPropagation();
-    console.log("bookmarked");
+  onModelChange: function () {
+    this.$el.addClass("someClass");
   },
   render: function () {
     this.$el.html(
-      this.model.get("title") +
-        "<button>Listen</button> <button class='bookmark'>Bookmark</button>"
+      this.model.get("title") + "- Listeners: " + this.model.get("listeners")
     );
     return this;
   },

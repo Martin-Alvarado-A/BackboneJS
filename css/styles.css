@@ -17,35 +17,3 @@ p {
   flex-flow: row wrap;
   gap: 10px 20px;
 }
-
-#venues-container {
-  flex: 1;
-  flex-basis: 300px;
-}
-
-#venues {
-  list-style: none;
-  border-top: 1px solid #ccc;
-  border-left: 1px solid #ccc;
-  padding-left: 0;
-  margin-top: 0;
-}
-
-#venues li {
-  padding: 30px;
-  border-bottom: 1px solid #ccc;
-  border-right: 1px solid #ccc;
-  cursor: pointer;
-}
-
-#venues li:hover {
-  background: #f7f5f5;
-}
-
-#map-container {
-  flex: 1;
-  flex-basis: 500px;
-  padding: 10px;
-  /* min-height: 100px; */
-  background: #ede8e8;
-}

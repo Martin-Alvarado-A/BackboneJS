@@ -1,4 +1,5 @@
 var Venue = Backbone.Model.extend();
+let VenueSelectedAction = 'venueSelected';
 
 var Venues = Backbone.Collection.extend({
   model: Venue,
@@ -7,11 +8,16 @@ var Venues = Backbone.Collection.extend({
 var VenueView = Backbone.View.extend({
   tagName: 'li',
 
+  initialize: function (options) {
+    this.bus = options.bus;
+  },
   events: {
     'click': 'onClick',
   },
 
-  onClick: function () {},
+  onClick: function () {
+    this.bus.trigger(VenueSelectedAction, this.model);
+  },
 
   render: function () {
     this.$el.html(this.model.get('name'));
@@ -25,11 +31,15 @@ var VenuesView = Backbone.View.extend({
 
   id: 'venues',
 
+  initialize: function (options) {
+    this.bus = options.bus;
+  },
+
   render: function () {
     var self = this;
 
-    this.model.each(function (venue) {
-      var view = new VenueView({ model: venue });
+    this.model.each((venue) => {
+      var view = new VenueView({ model: venue, bus: this.bus });
       self.$el.append(view.render().$el);
     });
 
@@ -39,13 +49,25 @@ var VenuesView = Backbone.View.extend({
 
 var MapView = Backbone.View.extend({
   el: '#map-container',
+  initialize: function (options) {
+    this.bus = options.bus;
 
+    this.bus.on(VenueSelectedAction, this.onVenueSelected, this);
+  },
+  onVenueSelected: function (venue) {
+    this.model = venue;
+    this.render();
+  },
   render: function () {
-    if (this.model) this.$('#venue-name').html(this.model.get('name'));
+    if (this.model) {
+      this.$('#venue-name').html(this.model.get('name'));
+    }
 
     return this;
   },
 });
+
+var bus = _.extend({}, Backbone.Events);
 
 var venues = new Venues([
   new Venue({ name: '30 Mill Espresso' }),
@@ -53,8 +75,8 @@ var venues = new Venues([
   new Venue({ name: 'Mr Foxx' }),
 ]);
 
-var venuesView = new VenuesView({ model: venues });
+var venuesView = new VenuesView({ model: venues, bus: bus });
 $('#venues-container').html(venuesView.render().$el);
 
-var mapView = new MapView();
+var mapView = new MapView({ bus: bus });
 mapView.render();

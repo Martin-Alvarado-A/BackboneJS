@@ -2,19 +2,21 @@
 // Later, you'll see how to organize your code into separate
 // files and modules.
 
-let Song = Backbone.Model.extend();
-
-let SongView = Backbone.View.extend({
-  render: function () {
-    let template = _.template($('#songTemplate').html());
-    let html = template(this.model.toJSON());
-    this.$el.html(html);
-
-    return this;
+let person = {
+  name: 'Mosh',
+  walk: function () {
+    this.trigger('walking', {
+      speed: 1,
+      startTime: '08:00',
+    });
   },
+};
+
+_.extend(person, Backbone.Events);
+
+person.once('walking', function (e) {
+  console.log('Im walkin here!');
+  console.log('event args: ', e);
 });
 
-let song = new Song({ id: 1, title: 'Pull me under', plays: 1100 });
-
-let songView = new SongView({ el: '#songs', model: song });
-songView.render();
+person.walk();

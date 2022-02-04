@@ -17,3 +17,12 @@ p {
   flex-flow: row wrap;
   gap: 10px 20px;
 }
+
+#nav ul li {
+  cursor: pointer;
+  color: blue;
+}
+#nav ul li:active,
+#nav ul li:hover {
+  color: purple;
+}

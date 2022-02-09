@@ -29,7 +29,7 @@ let Car = Vehicle.extend({
 
 let car = new Car({ 'registrationNumber': 'XLI887', color: 'blue' });
 
-car.clear('registrationNumber');
+car.unset('registrationNumber');
 
 car.isValid();
 

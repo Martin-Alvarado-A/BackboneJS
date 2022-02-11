@@ -14,19 +14,41 @@ let Vehicle = Backbone.Model.extend({
   },
 });
 
-let VehicleCollection = Backbone.Collection.extend({
+let vehicle = new Vehicle({ registrationNumber: 'XLI887', colour: 'Blue' });
+
+/* let VehicleCollection = Backbone.Collection.extend({
   model: Vehicle,
 });
 
-let Car = Vehicle.extend({
-  start: function () {
-    if (!this.isValid()) {
-      console.log(`Cannot start. Error: ${this.validationError}`);
-      return;
-    }
+let vehicles = new VehicleCollection([
+  new Vehicle({ registrationNumber: 'XLI887', colour: 'Blue' }),
+  new Vehicle({ registrationNumber: 'ZNP123', colour: 'Blue' }),
+  new Vehicle({ registrationNumber: 'XUV456', colour: 'Gray' }),
+]); */
 
-    console.log(
-      `Car with registration number ${this.attributes.registrationNumber} started.`
-    );
+let VehicleView = Backbone.View.extend({
+  tagName: 'li',
+  id: '132',
+  attributes: {
+    'data-color': '',
+  },
+  events: {
+    'click .delete': 'onClickDelete',
+  },
+  onClickDelete: function (e) {
+    var $targetElement = $(e.target);
+
+    console.log('deleted', $targetElement);
+  },
+  render: function () {
+    let template = _.template($('#vehicleTemplate').html());
+    let html = template(this.model.toJSON());
+    this.$el.html(html);
+
+    return this;
   },
 });
+
+let vehicleView = new VehicleView({ el: '#container', model: vehicle });
+vehicleView.render();
+// $('vehicleTemplate').html(vehicleView.render().$el);

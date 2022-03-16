@@ -1,6 +1,6 @@
 let Vehicle = Backbone.Model.extend({
   registrationNumber: 'vehicle id',
-  color: 'Vehicle color',
+  'data-color': 'Vehicle color',
 
   start: function () {
     console.log(`Vehicle started.`);
@@ -14,31 +14,21 @@ let Vehicle = Backbone.Model.extend({
   },
 });
 
-let vehicle = new Vehicle({ registrationNumber: 'XLI887', colour: 'Blue' });
-
-/* let VehicleCollection = Backbone.Collection.extend({
+let VehicleCollection = Backbone.Collection.extend({
   model: Vehicle,
 });
-
-let vehicles = new VehicleCollection([
-  new Vehicle({ registrationNumber: 'XLI887', colour: 'Blue' }),
-  new Vehicle({ registrationNumber: 'ZNP123', colour: 'Blue' }),
-  new Vehicle({ registrationNumber: 'XUV456', colour: 'Gray' }),
-]); */
 
 let VehicleView = Backbone.View.extend({
   tagName: 'li',
   id: '132',
   attributes: {
-    'data-color': '',
+    'data-color': "",
   },
   events: {
     'click .delete': 'onClickDelete',
   },
   onClickDelete: function (e) {
-    var $targetElement = $(e.target);
-
-    console.log('deleted', $targetElement);
+    this.remove();
   },
   render: function () {
     let template = _.template($('#vehicleTemplate').html());
@@ -49,6 +39,29 @@ let VehicleView = Backbone.View.extend({
   },
 });
 
-let vehicleView = new VehicleView({ el: '#container', model: vehicle });
-vehicleView.render();
-// $('vehicleTemplate').html(vehicleView.render().$el);
+let VehiclesView = Backbone.View.extend({
+  tagName: 'ol',
+  initialize: function () {
+    this.model.on('add', this.onVehicleAdded, this);
+  },
+  onVehicleAdded: function (vehicle) {
+    let vehicleView = new VehicleView({ model: vehicle });
+    this.$el.append(vehicleView.render().$el);
+  },
+  render: function () {
+    let self = this;
+    this.model.each(function (vehicle) {
+      let vehicleView = new VehicleView({ model: vehicle });
+      self.$el.append(vehicleView.render().$el);
+    });
+  },
+});
+
+let vehicles = new VehicleCollection([
+  new Vehicle({ registrationNumber: 'XLI887', "data-color": 'Blue' }),
+  new Vehicle({ registrationNumber: 'ZNP123', "data-color": 'Blue' }),
+  new Vehicle({ registrationNumber: 'XUV456', "data-color": 'Gray' }),
+]);
+
+let vehiclesView = new VehiclesView({ el: '#container', model: vehicles });
+vehiclesView.render();

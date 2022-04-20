@@ -24,7 +24,7 @@ let vehicles = new VehicleCollection([
   new Vehicle({ registrationNumber: 'ZNP123', colour: 'Blue' }),
   new Vehicle({ registrationNumber: 'XUV456', colour: 'Gray' }),
 ]);
- */
+*/
 
 let vehicles = new VehicleCollection([]);
 vehicles.add(new Vehicle({ registrationNumber: 'XLI887', colour: 'Blue' }));

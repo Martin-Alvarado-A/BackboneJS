@@ -1,4 +1,4 @@
-requestAnimationFrame.config({
+require.config({
   paths: {
     jquery: 'lib/jquery-min',
     underscore: 'lib/underscore-min',

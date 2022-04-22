@@ -1,17 +1,18 @@
-define(['underscore', 'models/songModel', 'views/songView'], function (
-  _,
-  Song,
-  SongView
-) {
-  let Initialize = function () {
-    var song = new Song({ title: 'blue in Green' });
+define([
+  'underscore',
+  'backbone',
+  'routes/app.routes',
+  'views/nav.view',
+], function (_, Backbone, AppRouter, NavView) {
+  let initialize = function () {
+    console.log(`🔎 | app | Initialize`);
 
-    var songView = new SongView({ el: '#container', model: song });
-
-    songView.render();
+    let router = new AppRouter();
+    Backbone.history.start();
+    let navViews = new NavView({ router: router, el: '#nav' });
   };
 
   return {
-    initialize: Initialize,
+    initialize: initialize,
   };
 });

@@ -7,5 +7,5 @@ require.config({
 });
 
 define(['app'], function (App) {
-  // App.initialize();
+  App.initialize();
 });

@@ -7,7 +7,8 @@ let Vehicle = Backbone.Model.extend({
   },
 
   validate: function (attr) {
-    if (!attr.registrationNumber) {
+    let regNum = attr.registrationNumber;
+    if (!regNum || regNum.length == 0) {
       console.log('Registration id required');
       return 'Registration id required';
     }
@@ -22,7 +23,7 @@ let VehicleView = Backbone.View.extend({
   tagName: 'li',
   id: '132',
   attributes: {
-    'data-color': "",
+    'data-color': '',
   },
   events: {
     'click .delete': 'onClickDelete',
@@ -41,12 +42,14 @@ let VehicleView = Backbone.View.extend({
 
 let VehiclesView = Backbone.View.extend({
   tagName: 'ol',
-  initialize: function () {
+  initialize: function (options) {
+    this.bus = options.bus;
     this.model.on('add', this.onVehicleAdded, this);
+    this.bus.on('addNewVehicle', this.onVehicleAdded, this);
   },
   onVehicleAdded: function (vehicle) {
     let vehicleView = new VehicleView({ model: vehicle });
-    this.$el.append(vehicleView.render().$el);
+    this.$el.prepend(vehicleView.render().$el);
   },
   render: function () {
     let self = this;
@@ -58,10 +61,43 @@ let VehiclesView = Backbone.View.extend({
 });
 
 let vehicles = new VehicleCollection([
-  new Vehicle({ registrationNumber: 'XLI887', "data-color": 'Blue' }),
-  new Vehicle({ registrationNumber: 'ZNP123', "data-color": 'Blue' }),
-  new Vehicle({ registrationNumber: 'XUV456', "data-color": 'Gray' }),
+  new Vehicle({ registrationNumber: 'XLI887', 'data-color': 'Blue' }),
+  new Vehicle({ registrationNumber: 'ZNP123', 'data-color': 'Blue' }),
+  new Vehicle({ registrationNumber: 'XUV456', 'data-color': 'Gray' }),
 ]);
 
-let vehiclesView = new VehiclesView({ el: '#container', model: vehicles });
+var bus = _.extend({}, Backbone.Events);
+
+let NewVehicleView = Backbone.View.extend({
+  tagName: 'span',
+  initialize: function (options) {
+    this.bus = options.bus;
+  },
+
+  events: {
+    'click .add': 'onAdd',
+  },
+
+  onAdd: function (e) {
+    var val = $('#addVehicle').val();
+    if (val.length === 0) return;
+
+    let newCar = new Vehicle({ registrationNumber: val });
+    this.bus.trigger('addNewVehicle', newCar);
+    $('#addVehicle').val('');
+  },
+
+  render: function () {
+    let template = _.template($('#listActionsTemplate').html());
+    let html = template();
+    this.$el.html(html);
+
+    return this;
+  },
+});
+
+let newVehicleView = new NewVehicleView({ el: '#listActions', bus: bus });
+newVehicleView.render();
+
+let vehiclesView = new VehiclesView({ el: '#list', model: vehicles, bus: bus });
 vehiclesView.render();

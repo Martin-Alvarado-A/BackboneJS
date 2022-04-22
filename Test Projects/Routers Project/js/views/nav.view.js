@@ -2,6 +2,7 @@ define(['jquery', 'underscore', 'backbone'], function ($, _, Backbone) {
   let NavView = Backbone.View.extend({
     initialize: function (options) {
       this.Router = options.router;
+      this.Router.navigate('home', { trigger: true });
     },
     events: {
       click: 'onClick',

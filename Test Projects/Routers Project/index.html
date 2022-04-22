@@ -22,7 +22,15 @@
       </ul>
     </nav>
 
-    <div id="container"></div>
+    <span id="container">
+      <div id="listActions"></div>
+      <div id="list"></div>
+    </span>
+
+    <script id="vehicleTemplate" type="text/html">
+      <%= registrationNumber %>
+      <button class="delete">Delete</button>
+    </script>
 
     <script src="js/lib/require.js" data-main="js/main"></script>
   </body>

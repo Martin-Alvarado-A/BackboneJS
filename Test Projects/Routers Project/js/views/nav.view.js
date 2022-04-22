@@ -1,7 +1,6 @@
 define(['jquery', 'underscore', 'backbone'], function ($, _, Backbone) {
   let NavView = Backbone.View.extend({
     initialize: function (options) {
-      console.log(`🔎 | NavView | initialize`, options);
       this.Router = options.router;
     },
     events: {
@@ -9,7 +8,13 @@ define(['jquery', 'underscore', 'backbone'], function ($, _, Backbone) {
     },
     onClick: function (e) {
       let $li = $(e.target);
-      console.log(`🔎 | NavView | onClick: `, $li.attr('data-url'));
+
+      if (!$li.attr('data-url')) {
+        return;
+      }
+      $li.siblings().removeClass('selected');
+      $li.addClass('selected');
+
       this.Router.navigate($li.attr('data-url'), { trigger: true });
     },
   });

@@ -7,6 +7,7 @@ define([
   '../views/cars.view',
   '../views/boats.view',
   '../collections/cars.collection',
+  '../collections/boats.collection',
 ], function (
   $,
   _,
@@ -15,7 +16,8 @@ define([
   HomeView,
   CarsView,
   BoatsView,
-  CarsCollection
+  CarsCollection,
+  BoatsCollection
 ) {
   var AppRouter = Backbone.Router.extend({
     routes: {
@@ -25,19 +27,23 @@ define([
       '*other': 'viewHome',
     },
     viewHome: function () {
-      let view = new HomeView({ el: '#container' });
+      let view = new HomeView({ el: '#list' });
       view.render();
     },
     viewCars: function () {
       let view = new CarsView({
-        el: '#container',
+        el: '#list',
         model: CarsCollection,
         bus: Bus,
       });
       view.render();
     },
     viewBoats: function () {
-      let view = new BoatsView({ el: '#container' });
+      let view = new BoatsView({
+        el: '#list',
+        model: BoatsCollection,
+        bus: Bus,
+      });
       view.render();
     },
   });

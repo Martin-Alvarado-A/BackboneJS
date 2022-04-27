@@ -37,8 +37,7 @@ p {
   max-height: 100%;
   overflow-y: hidden;
   display: flex;
-  flex-direction: column;
-  flex-flow: row wrap;
+  flex-flow: column wrap;
   gap: 10px 20px;
 }
 
